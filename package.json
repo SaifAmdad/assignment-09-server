@@ -1,0 +1,18 @@
+{
+  "name": "tutor-booking",
+  "version": "1.0.0",
+  "description": "Book your tutor hare. and you can add new tutors",
+  "keywords": [
+    "tutor"
+  ],
+  "license": "ISC",
+  "author": "saifamdad",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
