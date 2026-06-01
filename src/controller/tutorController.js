@@ -6,6 +6,11 @@ const getAllTutors = async (req, res) => {
     //   $and: [{ sessionStart: { $gt: from } }, { sessionStart: { $lt: till } }],
     // };
     const allTutors = await tutorModel.find();
+    if (allTutors.length < 1) {
+      return res.status(404).send({
+        message: "Tutor not found",
+      });
+    }
     console.log(allTutors);
     res.status(200).send(allTutors);
   } catch (error) {
