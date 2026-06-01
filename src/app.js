@@ -1,5 +1,12 @@
 const express = require("express");
 const app = express();
+const tutorRouter = require("./router/tutorRouter");
+const cors = require("cors");
+
+app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.json({
@@ -7,5 +14,7 @@ app.get("/", (req, res) => {
     message: "Hello server",
   });
 });
+
+app.use(tutorRouter);
 
 module.exports = app;
