@@ -7,6 +7,11 @@ const bookingSchema = new Schema(
       required: true,
       trim: true,
     },
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     tutorId: {
       type: Schema.Types.ObjectId,
       required: true,

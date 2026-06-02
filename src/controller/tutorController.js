@@ -14,7 +14,7 @@ const getAllTutors = async (req, res) => {
 
     return res.status(200).send(allTutors);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send(error);
   }
 };
 // -------------------------------------------------------
@@ -34,7 +34,7 @@ const addTutor = async (req, res) => {
       message: "Added new tutor",
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send(error);
   }
 };
 
@@ -42,7 +42,7 @@ const addTutor = async (req, res) => {
 
 const getTutorByUserId = async (req, res) => {
   try {
-    const userId = req.userId || req.params;
+    const userId = req.userId;
 
     const tutors = await tutorModel.find({ userId });
     if (tutors < 1) {
@@ -50,10 +50,36 @@ const getTutorByUserId = async (req, res) => {
         message: "Tutor not found with this id",
       });
     }
-    return res.status(200).json(tutors);
     console.log(tutors);
+    return res.status(200).send({
+      message: "Tutors returned successfully",
+      tutors,
+    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send(error);
+  }
+};
+
+// ------------------------------------------------------
+
+const getTutorById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.userId;
+
+    const tutor = await tutorModel.findById(id);
+    if (!tutor) {
+      return res.status(404).send({
+        message: "Tutor not found with this id",
+      });
+    }
+
+    return res.status(200).send({
+      message: "Tutor returned successfully",
+      tutor,
+    });
+  } catch (error) {
+    res.status(500).send(error);
   }
 };
 
@@ -89,7 +115,7 @@ const updateTutor = async (req, res) => {
       message: "Tutor updated successfully",
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send(error);
   }
 };
 
@@ -120,7 +146,7 @@ const deleteTutor = async (req, res) => {
       payload: deleted,
     });
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).send(error);
   }
 };
 
@@ -130,4 +156,5 @@ module.exports = {
   getTutorByUserId,
   updateTutor,
   deleteTutor,
+  getTutorById,
 };

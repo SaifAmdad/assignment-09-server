@@ -12,8 +12,14 @@ const addBooking = async (req, res) => {
       message: "Booking slot successfull",
     });
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).send(error);
   }
+};
+
+// ------------------------------------------
+
+const getBooking = async (req, res) => {
+  // pass
 };
 
 // ---------------------------------------------
@@ -42,7 +48,7 @@ const cancelBooking = async (req, res) => {
       message: "Cancelled booking successfull",
     });
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).send(error);
   }
 };
 
