@@ -11,29 +11,38 @@ const getAllTutors = async (req, res) => {
         message: "Tutor not found",
       });
     }
-    console.log(allTutors);
-    res.status(200).send(allTutors);
+
+    return res.status(200).send(allTutors);
   } catch (error) {
     res.status(500).json(error);
   }
 };
+// -------------------------------------------------------
 
 const addTutor = async (req, res) => {
   try {
     const tutorInfo = req.body;
-    const token = req.headers.auth;
+    const userId = req.userId;
+    if (userId !== tutorInfo.userId) {
+      return res.status(400).send({
+        message: "un-verified",
+      });
+    }
 
-    const newTutor = await tutorModel.create(tutorInfo);
-    res.json(newTutor);
+    // const newTutor = await tutorModel.create(tutorInfo);
+    return res.status(200).send({
+      message: "Added new tutor",
+    });
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
+// ------------------------------------------------------
+
 const getTutorByUserId = async (req, res) => {
   try {
-    const { userId } = req.params;
-    console.log(userId);
+    const userId = req.userId || req.params;
 
     const tutors = await tutorModel.find({ userId });
     if (tutors < 1) {
@@ -41,23 +50,78 @@ const getTutorByUserId = async (req, res) => {
         message: "Tutor not found with this id",
       });
     }
-    res.status(200).json(tutors);
+    return res.status(200).json(tutors);
     console.log(tutors);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
+// -Update tutor------------------------------------------------------
+
 const updateTutor = async (req, res) => {
-  const tutorInfo = req.body;
-  const token = req.headers.auth;
-  const userId = req.headers.userId;
-  // pass
+  try {
+    const updateInfo = req.body;
+    const userId = req.userId;
+
+    const { id } = req.params;
+    const updates = {};
+
+    for (let key in updateInfo) {
+      updates[key] = updateInfo[key];
+    }
+
+    const tutor = await tutorModel.findById(id);
+    if (!tutor) {
+      return res.status(404).send({
+        message: "Tutor not found with this ID",
+      });
+    }
+
+    if (tutor.userId.toString() !== userId.toString()) {
+      return res.status(401).send({
+        message: "Unauthorized action",
+      });
+    }
+
+    const updated = await tutorModel.findByIdAndUpdate(id, updates);
+    return res.status(200).send({
+      message: "Tutor updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
 
+// ----------------------------------------------------------------
+
 const deleteTutor = async (req, res) => {
-  const id = req.params;
-  // pass
+  try {
+    const { id } = req.params;
+    const userId = req.userId;
+
+    const tutor = await tutorModel.findById(id);
+    if (!tutor) {
+      return res.status(404).send({
+        message: "Tutor not found with this ID",
+      });
+    }
+
+    if (!userId || tutor.userId.toString() !== userId.toString()) {
+      return res.status(401).send({
+        message: "Unauthorized action",
+      });
+    }
+    const deleted = await tutorModel.findByIdAndDelete(id);
+    console.log(deleted);
+
+    return res.status(200).send({
+      message: "Tutor deleted successfully",
+      payload: deleted,
+    });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 };
 
 module.exports = {
