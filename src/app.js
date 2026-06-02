@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const tutorRouter = require("./router/tutorRouter");
 const cors = require("cors");
+const bookingRouter = require("./router/bookingRouter");
 
 app.use(cors());
 
@@ -16,5 +17,6 @@ app.get("/", (req, res) => {
 });
 
 app.use(tutorRouter);
+app.use(bookingRouter);
 
 module.exports = app;

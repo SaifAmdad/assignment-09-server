@@ -15,6 +15,7 @@ const isLogedin = async (req, res, next) => {
       });
     }
 
+    // id as string
     req.userId = payload.id;
 
     next();

@@ -5,6 +5,8 @@ const addBooking = async (req, res) => {
     const booking = req.body;
     const userId = req.userId;
 
+    booking.userId = userId;
+
     const newBooking = await bookingModel.create(booking);
     return res.status(200).send({
       message: "Booking slot successfull",
@@ -21,15 +23,23 @@ const cancelBooking = async (req, res) => {
     const userId = req.userId;
     const { id } = req.params;
 
-    
+    const booking = await bookingModel.findById(id);
 
-    const updates = {
-        status = 'Cancelled'
+    console.log(booking.userId);
+    if (booking?.userId.toString() !== userId.toString()) {
+      return res.status(401).send({
+        message: "Un-authorized",
+      });
     }
 
-    const canceled = await bookingModel.findByIdAndUpdate(id, );
+    const updates = {
+      status: "Cancelled",
+    };
+
+    const canceled = await bookingModel.findByIdAndUpdate(id, updates);
+
     return res.status(200).send({
-      message: "Booking slot successfull",
+      message: "Cancelled booking successfull",
     });
   } catch (error) {
     return res.status(500).json(error);
