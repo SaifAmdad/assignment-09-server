@@ -8,7 +8,7 @@ const {
   getTutorById,
 } = require("../controller/tutorController");
 const { isLogedin } = require("../middleware/auth");
-const tutorRouter = express();
+const tutorRouter = express.Router();
 
 tutorRouter.post("/add-tutor", isLogedin, addTutor);
 tutorRouter.get("/get-tutor/:id", isLogedin, getTutorById);

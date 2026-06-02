@@ -4,7 +4,7 @@ const {
   cancelBooking,
 } = require("../controller/bookingController");
 const { isLogedin } = require("../middleware/auth");
-const bookingRouter = express();
+const bookingRouter = express.Router();
 
 bookingRouter.post("/add-booking", isLogedin, addBooking);
 bookingRouter.patch("/cancel-booking/:id", isLogedin, cancelBooking);

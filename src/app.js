@@ -9,14 +9,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(tutorRouter);
+app.use(bookingRouter);
+
 app.get("/", (req, res) => {
   res.json({
     status: 200,
     message: "Hello server",
   });
 });
-
-app.use(tutorRouter);
-app.use(bookingRouter);
 
 module.exports = app;
