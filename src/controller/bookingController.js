@@ -1,4 +1,5 @@
 const bookingModel = require("../model/bookingModel");
+const tutorModel = require("../model/tutorModel");
 
 const addBooking = async (req, res) => {
   try {
@@ -6,7 +7,26 @@ const addBooking = async (req, res) => {
     const userId = req.userId;
 
     booking.userId = userId;
+    const tutor = await tutorModel.findById(booking.tutorId);
+    if (!tutor) {
+      return res.status(401).send({
+        success: false,
+        message: "Tutor not available with this ID",
+      });
+    }
 
+    if (tutor.totalSlot - tutor.bookedSlot < 1) {
+      return res.status(401).send({
+        success: false,
+        message: "Slot not available ",
+      });
+    }
+
+    const updates = {
+      bookedSlot: tutor.bookedSlot + 1,
+    };
+
+    await tutorModel.findByIdAndUpdate(tutor._id, updates);
     const newBooking = await bookingModel.create(booking);
     return res.status(200).send({
       success: true,
