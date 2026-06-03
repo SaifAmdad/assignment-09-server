@@ -31,6 +31,7 @@ const addTutor = async (req, res) => {
 
     const newTutor = await tutorModel.create(tutorInfo);
     return res.status(200).send({
+      success: true,
       message: "Added new tutor",
     });
   } catch (error) {

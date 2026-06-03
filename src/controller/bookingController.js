@@ -9,6 +9,7 @@ const addBooking = async (req, res) => {
 
     const newBooking = await bookingModel.create(booking);
     return res.status(200).send({
+      success: true,
       message: "Booking slot successfull",
     });
   } catch (error) {
@@ -19,7 +20,25 @@ const addBooking = async (req, res) => {
 // ------------------------------------------
 
 const getBooking = async (req, res) => {
-  // pass
+  try {
+    const userId = req.userId;
+    const booking = await bookingModel.find({ userId });
+    if (!booking) {
+      return res.status(404).send({
+        success: false,
+        message: "Booking not found",
+      });
+    }
+    return res.status(200).send({
+      success: true,
+      booking,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 // ---------------------------------------------
@@ -52,4 +71,4 @@ const cancelBooking = async (req, res) => {
   }
 };
 
-module.exports = { addBooking, cancelBooking };
+module.exports = { addBooking, cancelBooking, getBooking };
