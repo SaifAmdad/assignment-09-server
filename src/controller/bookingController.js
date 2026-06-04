@@ -73,6 +73,7 @@ const cancelBooking = async (req, res) => {
     console.log(booking.userId);
     if (booking?.userId.toString() !== userId.toString()) {
       return res.status(401).send({
+        success: false,
         message: "Un-authorized",
       });
     }
@@ -84,6 +85,7 @@ const cancelBooking = async (req, res) => {
     const canceled = await bookingModel.findByIdAndUpdate(id, updates);
 
     return res.status(200).send({
+      success: true,
       message: "Cancelled booking successfull",
     });
   } catch (error) {

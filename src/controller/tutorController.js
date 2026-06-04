@@ -8,11 +8,15 @@ const getAllTutors = async (req, res) => {
     const allTutors = await tutorModel.find();
     if (allTutors.length < 1) {
       return res.status(404).send({
+        success: false,
         message: "Tutor not found",
       });
     }
 
-    return res.status(200).send(allTutors);
+    return res.status(200).send({
+      success: true,
+      tutors: allTutors,
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -51,8 +55,9 @@ const getTutorByUserId = async (req, res) => {
         message: "Tutor not found with this id",
       });
     }
-    console.log(tutors);
+
     return res.status(200).send({
+      success: true,
       message: "Tutors returned successfully",
       tutors,
     });
@@ -76,6 +81,7 @@ const getTutorById = async (req, res) => {
     }
 
     return res.status(200).send({
+      success: true,
       message: "Tutor returned successfully",
       tutor,
     });
@@ -101,18 +107,21 @@ const updateTutor = async (req, res) => {
     const tutor = await tutorModel.findById(id);
     if (!tutor) {
       return res.status(404).send({
+        success: false,
         message: "Tutor not found with this ID",
       });
     }
 
     if (tutor.userId.toString() !== userId.toString()) {
       return res.status(401).send({
+        success: false,
         message: "Unauthorized action",
       });
     }
 
     const updated = await tutorModel.findByIdAndUpdate(id, updates);
     return res.status(200).send({
+      success: true,
       message: "Tutor updated successfully",
     });
   } catch (error) {
@@ -143,6 +152,7 @@ const deleteTutor = async (req, res) => {
     console.log(deleted);
 
     return res.status(200).send({
+      success: true,
       message: "Tutor deleted successfully",
       payload: deleted,
     });

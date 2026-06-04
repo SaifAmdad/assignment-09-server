@@ -23,11 +23,11 @@ const bookingSchema = new Schema(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      // required: true,
+      required: true,
     },
     email: {
       type: String,
-      // required: true,
+      required: true,
     },
     status: {
       type: String,
